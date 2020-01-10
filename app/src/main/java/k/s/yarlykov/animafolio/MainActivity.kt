@@ -5,20 +5,25 @@ import android.transition.Scene
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import android.view.Menu
-import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,40 +47,25 @@ class MainActivity : AppCompatActivity() {
         override fun onDrawerOpened(drawerView: View) {
             TransitionManager.go(scene1Enter, transition)
         }
+
+        override fun onDrawerStateChanged(newState: Int) {
+        }
+
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Подготовоить ресурсы для анимации
-        prepareTransition()
-
-        // Активировать тубар
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
-        // FAB
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        prepareTransition()
+        initFab()
+        initDrawerLayout()
+        initRecyclerView()
 
 
-        with(drawer_layout) {
-            addDrawerListener(drawerListener)
-
-        }
-        val drawerLayout = drawer_layout
-
-        // Установить обработчик движения шторки
-        drawerLayout.addDrawerListener(drawerListener)
-
-
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -84,18 +74,34 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send
             ), drawerLayout
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+
+        val navHostFragment = navController
+        if(navHostFragment is NavController) {
+            setupActionBarWithNavController(navHostFragment, appBarConfiguration)
+            navView.setupWithNavController(navHostFragment)
+
+        }
+    }
+
+    private fun initDrawerLayout() {
+        // Установить обработчик движения шторки
+        drawerLayout.addDrawerListener(drawerListener)
+    }
+
+    private fun initFab() {
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.navController)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
@@ -104,14 +110,54 @@ class MainActivity : AppCompatActivity() {
      * Первую Сцену вывести на экран.
      */
     private fun prepareTransition() {
-        val rootContainer = nav_container
-
         transition = TransitionInflater.from(this)
-            .inflateTransition(R.transition.header_transition)
+            .inflateTransition(R.transition.navigation_cap_transition)
 
-        sceneExit = Scene.getSceneForLayout(rootContainer, R.layout.scene_drawer_header_1, this)
-        scene1Enter = Scene.getSceneForLayout(rootContainer, R.layout.scene_drawer_header_2, this)
+        sceneExit = Scene.getSceneForLayout(navViewCap, R.layout.scene_drawer_header_1, this)
+        scene1Enter = Scene.getSceneForLayout(navViewCap, R.layout.scene_drawer_header_2, this)
         sceneExit.enter()
-
     }
+
+    private fun initRecyclerView() {
+        with(recyclerMenu) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = Adapter()
+        }
+    }
+
+    inner class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+            return ViewHolder(
+                LayoutInflater.from(this@MainActivity)
+                    .inflate(
+                        R.layout.layout_item_menu,
+                        parent,
+                        false
+                    )
+            )
+        }
+
+        override fun getItemCount(): Int {
+            return ITEMS
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            setAnimation(holder.itemView, position)
+
+//            holder.itemView.setOnClickListener { view ->
+//            }
+        }
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    }
+
+    private fun setAnimation(view : View, position : Int) {
+        val context = this@MainActivity
+        val animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
+        animation.duration = position.toLong() * 50 + 200
+        view.startAnimation(animation)
+    }
+
+
 }
