@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import k.s.yarlykov.animafolio.ui.MenuListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -121,43 +122,7 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         with(recyclerMenu) {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = Adapter()
+            adapter = MenuListAdapter(this@MainActivity, ITEMS)
         }
     }
-
-    inner class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-            return ViewHolder(
-                LayoutInflater.from(this@MainActivity)
-                    .inflate(
-                        R.layout.layout_item_menu,
-                        parent,
-                        false
-                    )
-            )
-        }
-
-        override fun getItemCount(): Int {
-            return ITEMS
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            setAnimation(holder.itemView, position)
-
-//            holder.itemView.setOnClickListener { view ->
-//            }
-        }
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-    }
-
-    private fun setAnimation(view : View, position : Int) {
-        val context = this@MainActivity
-        val animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
-        animation.duration = position.toLong() * 50 + 200
-        view.startAnimation(animation)
-    }
-
-
 }
