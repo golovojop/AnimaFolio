@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.tools
+package k.s.yarlykov.animafolio.ui.progressbar
 
 import android.os.Bundle
 import android.view.LayoutInflater
