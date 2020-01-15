@@ -15,4 +15,21 @@
     <string name="menu_send">Send</string>
     <string name="menu_test">Any action</string>
 
+    <string name="stub_image">Google Image</string>
+
+    <string-array name="months">
+        <item>Winter: December</item>
+        <item>Winter: January</item>
+        <item>Winter: February</item>
+        <item>Spring: March</item>
+        <item>Spring: April</item>
+        <item>Spring: May</item>
+        <item>Summer: June</item>
+        <item>Summer: July</item>
+        <item>Summer: August</item>
+        <item>Autumn: September</item>
+        <item>Autumn: October</item>
+        <item>Autumn: November</item>
+    </string-array>
+
 </resources>

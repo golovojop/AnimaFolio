@@ -1,13 +1,13 @@
-package k.s.yarlykov.animafolio.ui.send
+package k.s.yarlykov.animafolio.ui.fragments.slideshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SendViewModel : ViewModel() {
+class SlideshowViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is send Fragment"
+        value = "This is slideshow Fragment"
     }
     val text: LiveData<String> = _text
 }

@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.progressbar
+package k.s.yarlykov.animafolio.ui.fragments.progressbar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

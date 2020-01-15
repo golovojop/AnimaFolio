@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.share
+package k.s.yarlykov.animafolio.ui.fragments.share
 
 import android.os.Bundle
 import android.view.LayoutInflater

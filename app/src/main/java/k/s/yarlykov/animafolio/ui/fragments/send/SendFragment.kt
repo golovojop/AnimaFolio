@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.send
+package k.s.yarlykov.animafolio.ui.fragments.send
 
 import android.os.Bundle
 import android.view.LayoutInflater

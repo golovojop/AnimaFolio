@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.slideshow
+package k.s.yarlykov.animafolio.ui.fragments.slideshow
 
 import android.os.Bundle
 import android.view.LayoutInflater
