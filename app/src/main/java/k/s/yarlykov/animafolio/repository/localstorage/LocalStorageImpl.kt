@@ -16,8 +16,7 @@ class LocalStorageImpl(
     private val context: Context,
     private val imagesArrayId: Int,
     private val stringsArrayId: Int,
-    private val defaultDrawableId: Int,
-    private val defaultStringId: Int
+    private val defaultDrawableId: Int
 ) : LocalStorage {
 
     override fun connectToBitmapStream(): Single<List<Photo>> =
@@ -43,7 +42,7 @@ class LocalStorageImpl(
         loadCompletion.onNext(memoryCache.values.toList())
     }
 
-    // Step 3
+    // Step 3. Объединить Bitmap и текст в инстансы Photo
     private fun createPhotoObservable(): Observable<Photo> {
         return Observable.zip(
             createBitmapObservable(),
@@ -60,28 +59,16 @@ class LocalStorageImpl(
         )
     }
 
-    // Step 2
+    // Step 2.1
     private fun createStringObservable(): Observable<String> {
-
-        return Observable.create<Int> { emitter ->
-            try {
-                with(context.resources.obtainTypedArray(stringsArrayId)) {
-                    (0 until length()).forEach { i ->
-                        emitter.onNext(getResourceId(i, defaultStringId))
-                    }
-                    recycle()
-                    emitter.onComplete()
-                }
-            } catch (e: Exception) {
-                emitter.onError(e)
-            }
-        }.map { stringId ->
-            context.getString(stringId)
-        }
+        return Observable.fromIterable(
+            context
+                .resources
+                .getStringArray(stringsArrayId)
+                .asIterable())
     }
 
-
-    // Step 2
+    // Step 2.2
     private fun createBitmapObservable(): Observable<Pair<Int, Bitmap>> {
 
         // Уменьшить размер Bitmap через параметр options.inSampleSize

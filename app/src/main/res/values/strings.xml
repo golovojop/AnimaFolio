@@ -15,9 +15,11 @@
     <string name="menu_send">Send</string>
     <string name="menu_test">Any action</string>
 
+    <string name="motion">Parallax Motion Edu</string>
+
     <string name="stub_image">Google Image</string>
 
-    <string-array name="months">
+    <string-array name="month_names">
         <item>Winter: December</item>
         <item>Winter: January</item>
         <item>Winter: February</item>

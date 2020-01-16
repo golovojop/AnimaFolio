@@ -17,8 +17,9 @@ class AnimaFolioApp : Application(), DependencySource {
         localStorage = LocalStorageImpl(
             this,
             R.array.month_pics,
-            R.array.months,
-            R.drawable.bkg_05_may)
+            R.array.month_names,
+            R.drawable.bkg_05_may
+        )
 
         photoRepository = PhotoRepositoryImpl(localStorage)
     }
