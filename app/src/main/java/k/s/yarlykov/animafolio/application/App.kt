@@ -7,13 +7,23 @@ import k.s.yarlykov.animafolio.repository.photo.PhotoRepository
 import k.s.yarlykov.animafolio.repository.photo.PhotoRepositoryImpl
 import k.s.yarlykov.animafolio.repository.localstorage.LocalStorageImpl
 
-class AnimaFolioApp : Application(), DependencySource {
+class App : Application(), DependencySource {
+
+    companion object {
+        private var app : App? = null
+
+        fun getDependecies() : DependencySource = app as DependencySource
+    }
+
 
     private lateinit var localStorage: LocalStorage
     private lateinit var photoRepository: PhotoRepository
 
     override fun onCreate() {
         super.onCreate()
+
+        app = this
+
         localStorage = LocalStorageImpl(
             this,
             R.array.month_pics,
