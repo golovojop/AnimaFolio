@@ -15,4 +15,13 @@
         <item>@drawable/bkg_11_nov</item>
     </integer-array>
 
+    <integer-array name="nav_id">
+        <item>@id/nav_home</item>
+        <item>@id/nav_gallery</item>
+        <item>@id/nav_slideshow</item>
+        <item>@id/nav_tools</item>
+        <item>@id/nav_share</item>
+        <item>@id/nav_send</item>
+    </integer-array>
+
 </resources>
