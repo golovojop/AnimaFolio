@@ -6,24 +6,20 @@ import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.*
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import k.s.yarlykov.animafolio.domain.MenuItemData
 import k.s.yarlykov.animafolio.ui.MenuListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -129,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
         with(recyclerMenu) {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MenuListAdapter(this@MainActivity, extractMenuTitles())
+            adapter = MenuListAdapter(this@MainActivity, mapMenuToCustomModel())
         }
     }
 
@@ -137,7 +133,7 @@ class MainActivity : AppCompatActivity() {
     // title и иконку и формируем список из MenuItemData. Элементы меню
     // без иконок игнорируем. В результате полечается адаптер между
     // ресурсом меню и данными для формирования кастомного меню из RecyclerView.
-    private fun extractMenuTitles(): List<MenuItemData> {
+    private fun mapMenuToCustomModel(): List<MenuItemData> {
         val li = mutableListOf<MenuItemData>()
 
         with(MenuBuilder(this)) {
