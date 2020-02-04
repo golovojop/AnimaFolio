@@ -8,7 +8,9 @@ import android.transition.TransitionManager
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,7 +19,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import k.s.yarlykov.animafolio.domain.MenuItemData
-import k.s.yarlykov.animafolio.ui.MenuListAdapter
+import k.s.yarlykov.animafolio.ui.menu.MenuListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scene1Enter: Scene
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     // Обработчик движения шторки навигации
     private val drawerListener = object : DrawerLayout.DrawerListener {
@@ -66,12 +69,12 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_home, R.id.nav_parallax, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send
             ), drawerLayout
         )
 
-        val navController = findNavController(R.id.nav_controller)
+        navController = findNavController(R.id.nav_controller)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -123,10 +126,25 @@ class MainActivity : AppCompatActivity() {
 //            li.toTypedArray()
 //        }
 
-        with(recyclerMenu) {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MenuListAdapter(this@MainActivity, mapMenuToCustomModel())
+        recyclerMenu.also { rv ->
+            with(this@MainActivity) {
+                rv.layoutManager = LinearLayoutManager(this)
+                rv.adapter = MenuListAdapter(
+                    this,
+                    mapMenuToCustomModel(),
+                    ::navigateToDestination
+                )
+            }
         }
+    }
+
+    private fun navigateToDestination(menuItemData: MenuItemData) {
+
+        // Сменить контент
+        navController.navigate(R.id.action_nav_home_to_nav_parallax)
+
+        // Задвинуть обратно NavigationView
+        drawerLayout.closeDrawer(GravityCompat.START)
     }
 
     // Данные для RecyclerView берутся из файла меню. Считываем оттуда
@@ -140,8 +158,10 @@ class MainActivity : AppCompatActivity() {
             MenuInflater(this@MainActivity).inflate(R.menu.activity_main_drawer, this)
 
             (0 until this.size()).forEach { i ->
-                this.getItem(i).icon?.let {drawable ->
-                    li.add(i, MenuItemData(this.getItem(i).title.toString(), drawable))
+                this.getItem(i).icon?.let { drawable ->
+                    with(this.getItem(i)) {
+                        li.add(i, MenuItemData(itemId, title.toString(), drawable))
+                    }
                 }
             }
         }

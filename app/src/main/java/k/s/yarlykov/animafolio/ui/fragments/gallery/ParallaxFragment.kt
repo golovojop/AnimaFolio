@@ -1,8 +1,11 @@
-package k.s.yarlykov.animafolio.ui.photogallery
+package k.s.yarlykov.animafolio.ui.fragments.gallery
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,23 +15,35 @@ import k.s.yarlykov.animafolio.R
 import k.s.yarlykov.animafolio.application.App
 import k.s.yarlykov.animafolio.application.DependencySource
 import k.s.yarlykov.animafolio.domain.Photo
-import k.s.yarlykov.animafolio.ui.fragments.gallery.PhotoParallaxAdapter
 import kotlinx.android.synthetic.main.activity_parallax_photo.*
 
-class PhotoParallaxActivity : AppCompatActivity() {
+class ParallaxFragment : Fragment() {
 
     private val scrollEventsEmitter: BehaviorSubject<Int> = BehaviorSubject.create()
     private val model = mutableListOf<Photo>()
 
-    lateinit var disposable : Disposable
+    lateinit var disposable: Disposable
     lateinit var dependencySource: DependencySource
+    lateinit var currentContext: Context
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_parallax_photo)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_parallax, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         dependencySource = App.getDependecies()
         loadModel(this::initRecyclerView)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.currentContext = context
     }
 
     override fun onDestroy() {
@@ -38,10 +53,11 @@ class PhotoParallaxActivity : AppCompatActivity() {
         }
     }
 
+
     /**
      * Загрузить фотки
      */
-    private fun loadModel(onCompleteListener : (context: Context, data : List<Photo>) -> Unit) {
+    private fun loadModel(onCompleteListener : (ctx: Context, data : List<Photo>) -> Unit) {
         disposable = dependencySource
             .getPhotoReposytory()
             .galleryStream()
@@ -49,7 +65,7 @@ class PhotoParallaxActivity : AppCompatActivity() {
             .subscribe{list ->
                 model.clear()
                 model.addAll(list)
-                onCompleteListener(this, model)
+                onCompleteListener(currentContext, model)
             }
     }
 

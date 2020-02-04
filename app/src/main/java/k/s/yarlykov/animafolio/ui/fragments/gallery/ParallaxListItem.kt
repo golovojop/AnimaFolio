@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.photogallery
+package k.s.yarlykov.animafolio.ui.fragments.gallery
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,8 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 
 class ParallaxListItem @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : MotionLayout(context, attrs, defStyleAttr), VerticalMotionListener {
+) : MotionLayout(context, attrs, defStyleAttr),
+    VerticalMotionListener {
 
     // Максимальное значение Y верхнего левого угла элемента списка внутри RecyclerView
     private var maxOffset = minStartOffset

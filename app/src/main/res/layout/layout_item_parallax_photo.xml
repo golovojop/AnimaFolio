@@ -9,7 +9,7 @@
     app:cardUseCompatPadding="true"
     card_view:cardCornerRadius="4dp">
 
-    <k.s.yarlykov.animafolio.ui.photogallery.ParallaxListItem
+    <k.s.yarlykov.animafolio.ui.fragments.gallery.ParallaxListItem
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         app:layoutDescription="@xml/motion_scene_parallax_photo"
@@ -39,6 +39,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-    </k.s.yarlykov.animafolio.ui.photogallery.ParallaxListItem>
+    </k.s.yarlykov.animafolio.ui.fragments.gallery.ParallaxListItem>
 
 </com.google.android.material.card.MaterialCardView>

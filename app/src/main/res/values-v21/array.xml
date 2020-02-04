@@ -17,7 +17,7 @@
 
     <integer-array name="nav_id">
         <item>@id/nav_home</item>
-        <item>@id/nav_gallery</item>
+        <item>@id/nav_parallax</item>
         <item>@id/nav_slideshow</item>
         <item>@id/nav_tools</item>
         <item>@id/nav_share</item>

@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui.photogallery
+package k.s.yarlykov.animafolio.ui.fragments.gallery
 
 import android.content.Context
 import android.view.LayoutInflater

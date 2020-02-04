@@ -1,4 +1,4 @@
-package k.s.yarlykov.animafolio.ui
+package k.s.yarlykov.animafolio.ui.menu
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import k.s.yarlykov.animafolio.R
 import k.s.yarlykov.animafolio.domain.MenuItemData
 
-class MenuListAdapter(private val context: Context, private val items: List<MenuItemData>) :
+class MenuListAdapter(
+    private val context: Context,
+    private val items: List<MenuItemData>,
+    private val onClickCallback: (MenuItemData) -> Unit
+) :
     RecyclerView.Adapter<MenuListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,12 +47,18 @@ class MenuListAdapter(private val context: Context, private val items: List<Menu
         view.startAnimation(animation)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        private val tvTitle = view.findViewById<TextView>(R.id.item_title)
-        private val ivIcon = view.findViewById<ImageView>(R.id.item_preview)
 
-        fun bind(itemData : MenuItemData) {
+        val tvTitle : TextView = view.findViewById(R.id.item_title)
+        val ivIcon : ImageView = view.findViewById(R.id.item_preview)
+
+
+        fun bind(itemData: MenuItemData) {
+            view.setOnClickListener {
+                onClickCallback(itemData)
+            }
+
             tvTitle.text = itemData.title
             ivIcon.setImageDrawable(itemData.icon)
         }

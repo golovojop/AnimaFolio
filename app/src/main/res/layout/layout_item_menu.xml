@@ -23,6 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_menu_gallery"/>
+        app:srcCompat="@drawable/ic_menu_parallax"/>
 
 </LinearLayout>
