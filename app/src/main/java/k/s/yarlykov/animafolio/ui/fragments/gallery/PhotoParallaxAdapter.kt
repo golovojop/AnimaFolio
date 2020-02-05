@@ -44,6 +44,7 @@ class PhotoParallaxAdapter(
 
         private val ivPhoto = view.findViewById<ImageView>(R.id.ivPhoto)
         private val tvDescription = view.findViewById<TextView>(R.id.tvDescription)
+        private val tvMonth = view.findViewById<TextView>(R.id.tvMonth)
 
         init {
             val d = scrollObservable.subscribe {
@@ -62,6 +63,7 @@ class PhotoParallaxAdapter(
             motionView.onUpdateMaxOffset(motionView.minStartOffset)
             ivPhoto.setImageBitmap(photo.bitmap)
             tvDescription.text = photo.description
+            tvMonth.text = photo.description.substringAfterLast(" ")
         }
     }
 }

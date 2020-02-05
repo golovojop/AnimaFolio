@@ -19,15 +19,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import k.s.yarlykov.animafolio.domain.MenuItemData
+import k.s.yarlykov.animafolio.ui.menu.MenuController
 import k.s.yarlykov.animafolio.ui.menu.MenuListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        private const val ITEMS = 6
-    }
 
     private lateinit var transition: Transition
     private lateinit var sceneExit: Scene
@@ -35,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+
+    private lateinit var menuController: MenuController
 
     // Обработчик движения шторки навигации
     private val drawerListener = object : DrawerLayout.DrawerListener {
@@ -62,8 +61,6 @@ class MainActivity : AppCompatActivity() {
         prepareTransition()
         initFab()
         initDrawerLayout()
-        initRecyclerView()
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -77,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_controller)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        menuController = MenuController(this, initRecyclerView(), navController, drawerLayout)
     }
 
     private fun initDrawerLayout() {
@@ -114,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         sceneExit.enter()
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(): MenuListAdapter {
 
         // Оказалось ненужным
 //        val navIds = with(resources.obtainTypedArray(R.array.nav_id)) {
@@ -126,46 +125,14 @@ class MainActivity : AppCompatActivity() {
 //            li.toTypedArray()
 //        }
 
+        val adapter = MenuListAdapter(this)
+
         recyclerMenu.also { rv ->
-            with(this@MainActivity) {
-                rv.layoutManager = LinearLayoutManager(this)
-                rv.adapter = MenuListAdapter(
-                    this,
-                    mapMenuToCustomModel(),
-                    ::navigateToDestination
-                )
-            }
-        }
-    }
-
-    private fun navigateToDestination(menuItemData: MenuItemData) {
-
-        // Сменить контент
-        navController.navigate(R.id.action_nav_home_to_nav_parallax)
-
-        // Задвинуть обратно NavigationView
-        drawerLayout.closeDrawer(GravityCompat.START)
-    }
-
-    // Данные для RecyclerView берутся из файла меню. Считываем оттуда
-    // title и иконку и формируем список из MenuItemData. Элементы меню
-    // без иконок игнорируем. В результате полечается адаптер между
-    // ресурсом меню и данными для формирования кастомного меню из RecyclerView.
-    private fun mapMenuToCustomModel(): List<MenuItemData> {
-        val li = mutableListOf<MenuItemData>()
-
-        with(MenuBuilder(this)) {
-            MenuInflater(this@MainActivity).inflate(R.menu.activity_main_drawer, this)
-
-            (0 until this.size()).forEach { i ->
-                this.getItem(i).icon?.let { drawable ->
-                    with(this.getItem(i)) {
-                        li.add(i, MenuItemData(itemId, title.toString(), drawable))
-                    }
-                }
-            }
+            rv.layoutManager = LinearLayoutManager(this)
+            rv.adapter = adapter
         }
 
-        return li
+        return adapter
     }
+
 }

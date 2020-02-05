@@ -15,7 +15,7 @@ import k.s.yarlykov.animafolio.R
 import k.s.yarlykov.animafolio.application.App
 import k.s.yarlykov.animafolio.application.DependencySource
 import k.s.yarlykov.animafolio.domain.Photo
-import kotlinx.android.synthetic.main.activity_parallax_photo.*
+import kotlinx.android.synthetic.main.fragment_parallax.*
 
 class ParallaxFragment : Fragment() {
 
