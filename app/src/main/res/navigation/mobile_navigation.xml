@@ -7,37 +7,52 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="k.s.yarlykov.animafolio.ui.home.HomeFragment"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_nav_parallax"
+            app:destination="@id/nav_parallax"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_tools"
+            app:destination="@id/nav_tools"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="k.s.yarlykov.animafolio.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_parallax"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.gallery.ParallaxFragment"
+        android:label="@string/menu_parallax"
+        tools:layout="@layout/fragment_parallax" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="k.s.yarlykov.animafolio.ui.slideshow.SlideshowFragment"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="k.s.yarlykov.animafolio.ui.tools.ToolsFragment"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.progressbar.ToolsFragment"
         android:label="@string/menu_tools"
         tools:layout="@layout/fragment_tools" />
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="k.s.yarlykov.animafolio.ui.share.ShareFragment"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.share.ShareFragment"
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_share" />
 
     <fragment
         android:id="@+id/nav_send"
-        android:name="k.s.yarlykov.animafolio.ui.send.SendFragment"
+        android:name="k.s.yarlykov.animafolio.ui.fragments.send.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
 </navigation>

@@ -5,12 +5,10 @@ import android.transition.Scene
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AnimationUtils
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -19,23 +17,23 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import k.s.yarlykov.animafolio.domain.MenuItemData
+import k.s.yarlykov.animafolio.ui.menu.MenuController
+import k.s.yarlykov.animafolio.ui.menu.MenuListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        private const val ITEMS = 5
-    }
 
     private lateinit var transition: Transition
     private lateinit var sceneExit: Scene
     private lateinit var scene1Enter: Scene
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+
+    private lateinit var menuController: MenuController
 
     // Обработчик движения шторки навигации
     private val drawerListener = object : DrawerLayout.DrawerListener {
@@ -63,24 +61,21 @@ class MainActivity : AppCompatActivity() {
         prepareTransition()
         initFab()
         initDrawerLayout()
-        initRecyclerView()
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_home, R.id.nav_parallax, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send
             ), drawerLayout
         )
 
-        val navHostFragment = navController
-        if(navHostFragment is NavController) {
-            setupActionBarWithNavController(navHostFragment, appBarConfiguration)
-            navView.setupWithNavController(navHostFragment)
+        navController = findNavController(R.id.nav_controller)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
 
-        }
+        menuController = MenuController(this, initRecyclerView(), navController, drawerLayout)
     }
 
     private fun initDrawerLayout() {
@@ -101,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.navController)
+        val navController = findNavController(R.id.nav_controller)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
@@ -118,46 +113,26 @@ class MainActivity : AppCompatActivity() {
         sceneExit.enter()
     }
 
-    private fun initRecyclerView() {
-        with(recyclerMenu) {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = Adapter()
-        }
-    }
+    private fun initRecyclerView(): MenuListAdapter {
 
-    inner class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-            return ViewHolder(
-                LayoutInflater.from(this@MainActivity)
-                    .inflate(
-                        R.layout.layout_item_menu,
-                        parent,
-                        false
-                    )
-            )
-        }
-
-        override fun getItemCount(): Int {
-            return ITEMS
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            setAnimation(holder.itemView, position)
-
-//            holder.itemView.setOnClickListener { view ->
+        // Оказалось ненужным
+//        val navIds = with(resources.obtainTypedArray(R.array.nav_id)) {
+//            val li = mutableListOf<Int>()
+//            (0 until length()).forEach { i ->
+//                li.add(i, getResourceId(i, 0))
 //            }
+//            recycle()
+//            li.toTypedArray()
+//        }
+
+        val adapter = MenuListAdapter(this)
+
+        recyclerMenu.also { rv ->
+            rv.layoutManager = LinearLayoutManager(this)
+            rv.adapter = adapter
         }
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-    }
 
-    private fun setAnimation(view : View, position : Int) {
-        val context = this@MainActivity
-        val animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
-        animation.duration = position.toLong() * 50 + 200
-        view.startAnimation(animation)
+        return adapter
     }
-
 
 }
